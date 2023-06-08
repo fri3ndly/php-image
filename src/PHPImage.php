@@ -317,7 +317,7 @@ class PHPImage {
 			} else {
 				$contenttype = $headers['Content-Type'];
 			}
-			if (preg_match('#^image/(jpe?g|png|gif)$#i', $contenttype)) {
+            if (preg_match('#^image/(jpe?g|png|gif|webp)$#i', $contenttype)) {
 				switch(true){
 					case stripos($contenttype, 'jpeg') !== false:
 					case stripos($contenttype, 'jpg') !== false:
@@ -332,6 +332,10 @@ class PHPImage {
 						$img = imagecreatefromgif($file);
 						$type = IMAGETYPE_GIF;
 						break;
+                    case stripos($contenttype, 'webp') !== false:
+                        $img = imagecreatefromwebp($file);
+                        $type = IMAGETYPE_GIF;
+                        break;
 					default:
 						return false;
 						break;
@@ -362,6 +366,11 @@ class PHPImage {
 						$img = imagecreatefrompng($file);
 					}
 					break;
+                case IMAGETYPE_WEBP:
+                    if ($returnResource) {
+                        $img = imagecreatefromwebp($file);
+                    }
+                    break;
 				default:
 					return false;
 					break;
