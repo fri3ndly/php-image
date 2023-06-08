@@ -334,7 +334,7 @@ class PHPImage {
 						break;
                     case stripos($contenttype, 'webp') !== false:
                         $img = imagecreatefromwebp($file);
-                        $type = IMAGETYPE_GIF;
+                        $type = IMAGETYPE_WEBP;
                         break;
 					default:
 						return false;
