@@ -886,6 +886,47 @@ class PHPImage {
 		}
 	}
 
+    /**
+     * Draw an image from file and
+     * cover the canvas with it
+     *
+     * @param $file
+     * @return $this|void
+     * @throws Exception
+     */
+    public function drawToCover($file){
+        if($info = $this->getImageInfo($file)){
+            $image = $info->resource;
+            $width = $info->width;
+            $height = $info->height;
+
+            $canvasWidth = $this->getWidth();
+            $canvasHeight = $this->getHeight();
+            $scale = max($canvasWidth / $width, $canvasHeight / $height);
+            $scaledWidth = $width * $scale;
+            $scaledHeight = $height * $scale;
+
+            // Draw image
+            imagecopyresampled(
+                $this->img,
+                $image,
+                ($canvasWidth - $scaledWidth) / 2,
+                ($canvasHeight - $scaledHeight) / 2,
+                0,
+                0,
+                $scaledWidth,
+                $scaledHeight,
+                $width,
+                $height
+            );
+            imagedestroy($image);
+            $this->afterUpdate();
+            return $this;
+        } else {
+            $this->handleError($file . ' is not a valid image!');
+        }
+    }
+
 	/**
 	 * Draw text
 	 *
